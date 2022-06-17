@@ -1,0 +1,29 @@
+<div 
+  style="
+    height: 100%; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+  "
+>
+  <h1>Список проведенных ГТМ (количество - ${count})</h1>
+  <a 
+    href="/gtm-summary/view/list/success/1"
+    style="
+      margin: 1rem;
+      font-size: 2rem;
+    "
+  >
+    Успешные (количество - ${success_count}, ${round(success_count / count, 2) * 100}%)
+  </a>
+  <a 
+    href="/gtm-summary/view/list/unsuccess"
+    style="
+      margin: 1rem;
+      font-size: 2rem;
+    "
+  >
+    Неуспешные (количество - ${unsuccess_count}, ${round(unsuccess_count / count, 2) * 100}%)
+  </a>
+</div>

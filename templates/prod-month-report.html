@@ -1,0 +1,143 @@
+<style>
+  td, th {
+    padding: 0.5rem;
+  }
+  .notion {
+    width: 1rem;
+    height: 1rem;
+    margin: 0 1rem;
+  }
+  .gtm {
+    background-color: red;
+    color: white;
+  }
+  .no-gtm {
+    background-color: silver;
+  }
+  .has-last {
+    background-color: green;
+    color: white;
+  }
+</style>
+% if not data:
+  <h1 style="text-align: center;">Данных нет</h1>
+% else:
+  <%
+    gtm_active = None
+    pred_active = False
+  %>
+  <h3 style="text-align: center;">
+    Скважина - 
+    <span style="color: blue;">${well['uwi']}</span> 
+  </h3>
+  <div style="text-align: center;">
+    <a href="/gtm-summary/view/list/">Список проведенных ГТМ</a>
+  </div>
+  <br>
+  <table
+    border="1" 
+    style="
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+    "
+  >
+    <tr>
+      <th>ГТМ</th>
+      <th>Начало</th>
+      <th>Конец</th>
+      <th>Отработанное время после ГТМ</th>
+      <th>Фактический прирост дебита жидкости, (м^3 / сут)</th>
+      <th>Плановый прирост дебита жидкости, (м^3 / сут)</th>
+      <th>Фактический прирост дебита нефти, (т / сут)</th>
+      <th>Плановый прирост дебита нефти, (т / сут)</th>
+      <th>Отклонение</th>
+      <th>Успешность</th>
+    </tr>
+    % for row in summary:
+      <tr>
+        <td>${row['gtm_kind_name_short_ru']}</td>
+        <td>${row['gtm_dbeg']}</td>
+        <td>${row['gtm_dend']}</td>
+        <td>${row['total_work_after_gtm']}</td>
+        <td>${row['total_add_liquid_rate']}</td>
+        <td>${row['plan_liquid_rate']}</td>
+        <td>${row['total_add_oil_rate']}</td>
+        <td>${row['plan_oil_rate']}</td>
+        <td>${row['dev_oil_rate']}</td>
+        <td>${row['success_oil']}</td>
+      </tr>
+    % endfor
+  </table>
+  <br>
+  <div style="display: flex; flex-direction: row; justify-content: space-evenly;">
+    <img 
+      style="width: 49%"
+      src="/prod-month-report/plot/liquid/${well['id']}?success=${success}" 
+      alt="Добыча жидкости"
+    >
+    <img 
+      style="width: 49%;"
+      src="/prod-month-report/plot/oil/${well['id']}?success=${success}" 
+      alt="Добыча нефти"
+    >
+  </div>
+  <br>
+  <table 
+    border="1" 
+    style="
+      border-collapse: collapse;
+      margin-left: auto;
+      margin-right: auto;
+    "
+  >
+    <tr>
+      <th>Дата</th>
+      <th>Факт/Прогноз</th>
+      <th>Отработанное время (сут)</th>
+      <th>Добыто жидкости за месяц (м^3)</th>
+      <th>Базовая добыча жидкости за месяц (м^3)</th>
+      <th>Дополнительная добыча жидкости, (м^3)</th>
+      <th>Средний прирост дебита жидкости, (м^3 / сут)</th>
+      <th>Добыто нефти за месяц (м^3)</th>
+      <th>Базовая добыча нефти за месяц (м^3)</th>
+      <th>Дополнительная добыча нефти, (м^3)</th>
+      <th>Средний прирост дебита нефти, (м^3 / сут)</th>
+    </tr>
+    % for row in data:
+      <tr
+        class="
+          % if row['gtm'] and row['is_fact'] and (not gtm_active or gtm_active != row['gtm']):
+            <%
+              gtm_active = row['gtm']
+            %>
+            gtm
+          % elif not row['is_fact'] and not pred_active:
+            <%
+              pred_active = True
+            %>
+            has-last
+          % endif        
+        "
+      >      
+        <td>${row['date'].strftime('%Y-%m')}</td>
+        <td>
+          % if row['is_fact']:
+            Факт
+          % else:
+            Прогноз
+          % endif
+        </td>
+        <td>${round(row['work'])}</td>
+        <td>${round(row['liquid'])}</td>
+        <td>${round(row['base_liquid'])}</td>
+        <td>${round(row['add_liquid'])}</td>
+        <td>${round(row['add_liquid_rate'])}</td>
+        <td>${round(row['oil'])}</td>
+        <td>${round(row['base_oil'])}</td>
+        <td>${round(row['add_oil'])}</td>
+        <td>${round(row['add_oil_rate'], 1)}</td>    
+      </tr>
+    % endfor
+  </table>
+% endif

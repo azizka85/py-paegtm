@@ -1,0 +1,41 @@
+<div 
+  style="
+    height: 100%; 
+    display: flex; 
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center;
+  "
+>
+  <h1>Список неуспешно проведенных ГТМ (количество - ${count})</h1>
+  <div style="text-align: center;">
+    <a href="/gtm-summary/view/list/">Список проведенных ГТМ</a>
+  </div>
+  <a 
+    href="/gtm-summary/view/list/unsuccess-wc/1"
+    style="
+      margin: 1rem;
+      font-size: 2rem;
+    "
+  >
+    По обводненности (количество - ${wc_count}, ${round(wc_count / count, 2) * 100}%)
+  </a>
+  <a 
+    href="/gtm-summary/view/list/unsuccess-liquid/1"
+    style="
+      margin: 1rem;
+      font-size: 2rem;
+    "
+  >
+    По жидкости (количество - ${liquid_count}, ${round(liquid_count / count, 2) * 100}%)
+  </a>
+  <a 
+    href="/gtm-summary/view/list/unsuccess-other/1"
+    style="
+      margin: 1rem;
+      font-size: 2rem;
+    "
+  >
+    Остальные (количество - ${other_count}, ${round(other_count / count, 2) * 100}%)
+  </a>
+</div>

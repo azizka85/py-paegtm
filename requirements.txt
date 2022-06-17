@@ -1,0 +1,10 @@
+matplotlib
+Mako
+pypika
+asyncpg
+pytz
+python-dateutil
+python-dotenv
+fastapi
+uvicorn[standard]
+

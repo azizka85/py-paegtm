@@ -1,0 +1,43 @@
+<style>
+  td {
+    padding: 0.25rem;
+  }
+</style>
+<h1 style="text-align: center;">Список неуспешно проведенных ГТМ, не по жидкости и не по обводненности (кол-во: ${count})</h1>
+<div style="text-align: center;">
+  <a href="/gtm-summary/view/list/">Список проведенных ГТМ</a>
+</div>
+<br>
+<table 
+  border="1" 
+  style="
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+  "
+>
+  <tr>
+    <th>Имя скважины (uwi)</th>
+    <th>Вид ГТМ</th>
+    <th>Начало проведения ГТМ</th>
+    <th>Конец проведения ГТМ</th>
+  </tr>
+  % for row in data:
+    <tr>      
+      <td>
+        <a href="/prod-month-report/view/${row['uwi']}?success=0">
+          ${row['uwi']}
+        </a>
+      </td>
+      <td>${row['gtm_kind_name_short_ru']}</td>
+      <td>${row['gtm_dbeg'].strftime('%Y-%m-%d %H:%M')}</td>
+      <td>${row['gtm_dend'].strftime('%Y-%m-%d %H:%M')}</td>
+    </tr>
+  % endfor
+</table>
+<br>
+<div style="text-align: center;">
+  % for page_index in range(1, pages_count+1):
+    <a href="/gtm-summary/view/list/unsuccess-other/${page_index}">${page_index}</a> | 
+  % endfor
+</div>
